@@ -17,7 +17,7 @@ const Checkbox: FC<CheckboxProps> = ({ selected = false, onClick }) => {
         <>
             <StyledCheckbox type="checkbox" checked={selected} onClick={onClick} />
             {selected && (
-                <div tw="absolute w-6 h-6 -ml-1 rounded" onClick={onClick}>
+                <div tw="z-50 -ml-10 w-6 h-6 rounded" onClick={onClick}>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 64 64"

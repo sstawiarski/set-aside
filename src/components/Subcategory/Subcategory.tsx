@@ -15,6 +15,11 @@ const StyledRow = styled.div<SubcategoryProps>(({ collapsed = false, selected = 
     collapsed && tw`py-0 px-4`,
 ]);
 
+const StyledLabel = styled.span<{ selected: boolean }>(({ selected }) => [
+    tw`ml-0`,
+    selected && tw`-ml-1`
+])
+
 const Subcategory: FC<{ id: string, name: string }> = ({ id, name }) => {
     const [selected, setSelected] = useState<boolean>(false);
     const collapsed = useAppSelector((state) => state.ui.collapsed);
@@ -23,7 +28,7 @@ const Subcategory: FC<{ id: string, name: string }> = ({ id, name }) => {
     return (
         <StyledRow selected={selected} collapsed={collapsed}>
             <Checkbox selected={selected} onClick={() => setSelected(!selected)} />
-            <span>{name}</span>
+            <StyledLabel selected={selected}>{name}</StyledLabel>
             <span css="margin-left: auto; margin-right: 1rem;">{currentBudgeted}</span>
         </StyledRow>
     );
