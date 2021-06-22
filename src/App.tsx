@@ -1,58 +1,65 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import "./App.css";
+import tw from "twin.macro";
+import Subcategory from "./components/Subcategory/Subcategory";
+import Category from "./components/Category/Category";
+import Toggle from "./components/Toggle/Toggle";
+import { useAppDispatch, useAppSelector } from "./redux/hooks";
+import { toggleCollapse } from "./redux/uiSlice";
+import { moveMoney } from "./redux/moneySlice";
+import { Menu, Transition } from "@headlessui/react";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
-    </div>
-  );
+    const dispatch = useAppDispatch();
+    const collapseRows = useAppSelector((state) => state.ui.collapsed);
+    const moneyToBudget = useAppSelector((state) => state.money.toBeBudgeted);
+
+    return (
+        <div className="App">
+            <div>
+                <span>{moneyToBudget}</span>
+            </div>
+            <div tw="flex flex-col">
+                <button onClick={() => dispatch(moveMoney({ value: 5, source: "test", destination: "toBeBudgeted" }))}>
+                    Add $5 to Budget
+                </button>
+                <button onClick={() => dispatch(moveMoney({ value: 5, source: "toBeBudgeted", destination: "1" }))}>
+                    Add $5 to ID 1
+                </button>
+                <button onClick={() => dispatch(moveMoney({ value: 5, source: "toBeBudgeted", destination: "2" }))}>
+                    Add $5 to ID 2
+                </button>
+            </div>
+
+            <Menu as="div">
+                <Menu.Button tw="absolute right-2 top-5 text-black hover:text-purple-900 focus:outline-none hover:bg-purple-200 px-2 py-1 rounded-md transition-colors cursor-pointer">
+                    UI Settings
+                </Menu.Button>
+                <Transition
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95">
+                    <Menu.Items tw="absolute right-2 p-5 top-12 w-56 mt-2 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <Menu.Item>
+                            <Toggle
+                                selected={collapseRows}
+                                label="Collapse rows"
+                                onToggle={() => dispatch(toggleCollapse())}
+                            />
+                        </Menu.Item>
+                    </Menu.Items>
+                </Transition>
+            </Menu>
+            <div tw="w-3/4 float-right mt-24">
+                <Category title="Expenses">
+                    <Subcategory name="Fees" id="1" />
+                    <Subcategory name="Interest" id="2" />
+                </Category>
+            </div>
+        </div>
+    );
 }
 
 export default App;
