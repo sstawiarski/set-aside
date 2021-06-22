@@ -7,11 +7,14 @@ import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { toggleCollapse } from "./redux/uiSlice";
 import { moveMoney } from "./redux/moneySlice";
 import { Menu, Transition } from "@headlessui/react";
+import { useMediaQuery } from './hooks';
+import TapBar from "./components/TapBar/TapBar";
 
 function App() {
     const dispatch = useAppDispatch();
     const collapseRows = useAppSelector((state) => state.ui.collapsed);
     const moneyToBudget = useAppSelector((state) => state.money.toBeBudgeted);
+    const isSmall = useMediaQuery('(max-width: 600px)');
 
     return (
         <div className="App">
@@ -57,6 +60,9 @@ function App() {
                     <Subcategory name="Fees" id="1" />
                     <Subcategory name="Interest" id="2" />
                 </Category>
+            </div>
+            <div tw="fixed bottom-10 w-full">
+                {isSmall ? <TapBar /> : <span>large</span>}
             </div>
         </div>
     );
