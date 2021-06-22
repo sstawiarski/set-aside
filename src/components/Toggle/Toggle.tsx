@@ -9,7 +9,7 @@ interface ToggleProps {
 }
 
 const StyledToggle = styled(Switch)(({ checked }) => [
-    tw`bg-gray-200 w-12 h-6 rounded-full`,
+    tw`bg-gray-200 w-12 h-6 rounded-full focus:outline-none`,
     checked && tw`bg-green-500`,
 ]);
 
